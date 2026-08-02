@@ -1,0 +1,13 @@
+{
+  "name": "claude-tend",
+  "owner": {
+    "name": "alexgaoth"
+  },
+  "plugins": [
+    {
+      "name": "tend",
+      "source": "./",
+      "description": "Keeps project CLAUDE.md files true, short, and load-bearing — distills non-obvious session learnings into the file and prunes what went stale."
+    }
+  ]
+}

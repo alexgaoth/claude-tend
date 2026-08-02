@@ -1,0 +1,8 @@
+{
+  "name": "tend",
+  "description": "Keeps project CLAUDE.md files true, short, and load-bearing — after significant work, distills non-obvious learnings from the session into the file and prunes what went stale.",
+  "version": "1.0.0",
+  "author": {
+    "name": "alexgaoth"
+  }
+}
