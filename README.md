@@ -10,7 +10,7 @@ As a plugin (recommended):
 
 ```
 /plugin marketplace add alexgaoth/claude-tend
-/plugin install tend
+/plugin install tend@claude-tend
 ```
 
 Via [skills.sh](https://skills.sh/) (installs the skill for Claude Code and other agents):
@@ -36,9 +36,9 @@ Claude can also invoke it on its own after finishing significant work — the sk
 
 1. **Find** the right file — root `CLAUDE.md`, nested per-package ones, or `AGENTS.md` when that's the project's source of truth. Personal files (`CLAUDE.local.md`, `~/.claude/CLAUDE.md`) are never touched.
 2. **Harvest** the session: what was discovered the hard way, what went wrong that one line would have prevented, rules the user stated, commands that actually work, invariants the code doesn't announce.
-3. **Gate** every candidate — it must be non-obvious, durable, behavior-changing, and project-scoped, or it's dropped. Zero survivors means the skill says so and stops; no padding.
+3. **Gate** every candidate — it must be non-obvious, durable, behavior-changing, and project-scoped, or it's dropped. Zero survivors still runs the staleness pass below; "nothing to add and nothing stale" is the honest no-op — never padding.
 4. **Verify** existing claims in areas the session touched — stale commands and dead paths get fixed or deleted.
-5. **Edit** in place — merge rather than append, facts at the right scope, a ~60-line target per file with hard pressure past ~100. The diff is summarized and left uncommitted for review.
+5. **Edit** in place — merge rather than append, facts at the right scope, a ~60-line target per file with hard pressure past ~100. The diff is summarized and left uncommitted for review — unless the flow you're in already commits, in which case it rides along in that commit.
 
 ## The philosophy
 
@@ -59,7 +59,7 @@ A `CLAUDE.md` is not documentation — it's **context every future session pays 
 
 ### The optional Stop-hook nudge
 
-Add to `~/.claude/settings.json`, adjusting the path to your clone:
+Add to `~/.claude/settings.json`, adjusting the path to wherever a stable copy of `hooks/stop-nudge.py` lives — a clone of this repo, or the file copied anywhere permanent. (Plugin installs land in the plugin cache and don't register hooks automatically; the nudge is opt-in by design.)
 
 ```json
 {
@@ -75,7 +75,7 @@ Add to `~/.claude/settings.json`, adjusting the path to your clone:
 }
 ```
 
-It fires at most once per session, only inside git repos, and always lets the model decide "this session was trivial, finish anyway." The `stop_hook_active` guard prevents blocking loops.
+It fires at most once per session, only inside git repos, and always lets the model decide "this session was trivial, finish anyway." The `stop_hook_active` guard prevents blocking loops, and internal failures are handled silently: malformed input, a missing `git`, or no way to record the once-per-session marker all make the hook skip the nudge and exit cleanly — it never breaks your session's ability to stop.
 
 ## License
 

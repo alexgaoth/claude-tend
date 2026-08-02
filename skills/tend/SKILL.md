@@ -13,8 +13,9 @@ If an argument was given, treat it as the focus area (e.g. `/tend the build tool
 
 ## 1. Find the files
 
-- Repo root: `git rev-parse --show-toplevel`. In scope: root `CLAUDE.md`, nested `CLAUDE.md` files in directories you worked in, and `AGENTS.md`.
+- Project root: `git rev-parse --show-toplevel`; outside a git repo, the directory the work happened in. In scope: root `CLAUDE.md`, nested `CLAUDE.md` files in directories you worked in, and `AGENTS.md`.
 - If the project keeps its agent docs in `AGENTS.md` (no `CLAUDE.md`, or `CLAUDE.md` is a symlink or one-line pointer to it), edit `AGENTS.md` instead.
+- `CLAUDE.md` can import other files via `@path` lines. Follow imports when reading, and when a fact's natural home is an imported file (e.g. `@docs/testing.md`), edit it there — never duplicate it in the importer.
 - Never edit `CLAUDE.local.md` or `~/.claude/CLAUDE.md` here — those are personal, not project docs.
 - No file at all? Create a root `CLAUDE.md` only if step 2 produces real material. Never scaffold empty sections.
 
@@ -27,15 +28,18 @@ Answer each question, collecting candidate facts:
 - What did the user state as a project rule ("always X", "never Y", "we use Z here")?
 - Which build / test / run / verify commands actually work, where the obvious guess fails?
 - What invariant does the code not announce? Generated files, pairs kept in sync by hand, ordering constraints, load-bearing hacks.
+- Which existing CLAUDE.md line did I misread, overlook, or find wrong? An instruction that failed to instruct is a bug — rewrite it so the next agent can't miss it.
+
+This works the same outside software: a docs, research, or data project also has real commands, invariants, and gotchas.
 
 Then filter every candidate through four gates; drop it unless ALL hold:
 
-1. **Non-obvious** — two minutes of reading the code would not reveal it.
+1. **Non-obvious** — two minutes of reading the project would not reveal it.
 2. **Durable** — still true after this branch merges. Not narration of what we just did.
 3. **Behavior-changing** — a future agent acts differently for knowing it.
 4. **Project-scoped and committable** — personal preferences (how the user likes to be addressed, their formatting tastes) belong in their own global config, never in a committed team file. Same for secrets, tokens, and anything else that should not live in the repo.
 
-If nothing survives, say so and stop. Padding the file is worse than skipping.
+Zero survivors is normal — never pad the file. But don't stop yet: run step 3's staleness check first. "Nothing to add and nothing stale" is the full no-op outcome; say so and stop there.
 
 ## 3. Verify before writing
 
