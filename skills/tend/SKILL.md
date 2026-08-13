@@ -53,7 +53,21 @@ Zero survivors is normal — never pad the file. But don't stop yet: run step 3'
 - Right scope: package-specific facts go in that package's nested CLAUDE.md; repo-wide facts at root.
 - One fact per line — imperative, concrete: the exact command, the path, the rule. Include a "why" only when the why is what prevents the mistake.
 - Match the file's existing structure and voice. Creating fresh? Only sections you can actually fill (typically `## Commands`, `## Architecture`, `## Gotchas`).
-- Budget: aim under ~60 lines per file; past ~100, compress or delete before adding. Added three lines? Look for three to remove.
+
+### Budget — sized to the project, spent by displacement
+
+Count the files *this* file governs — the whole repo for the root one, only its own subtree for a nested one:
+
+    git ls-files :/ | wc -l                     # root CLAUDE.md
+    git ls-files ":(top)packages/api" | wc -l   # packages/api/CLAUDE.md
+
+Under 100 files → **40 lines**; under 1,000 → **60**; under 10,000 → **80**; 10,000 or more → **100**. Past that size the answer is more nested files, not a longer root file. Outside a git repo, count the governed tree the same way, skipping dependency, build, and data directories — the bands are coarse, so a rough count still lands in the right one.
+
+Measure the file itself with `wc -l`: headers and blanks included, plus any `@path` file it imports.
+
+A budget is a trade, not a cap. At or over it, a new line must **displace** a weaker one: name the line it beats, then cut that line. A fold must shorten the text, not just the line count. And if no line in the file is weaker than your candidate, the candidate wasn't worth adding either.
+
+Already over budget with nothing to add? Cut the weakest lines that fail the gates. If every line left earns its place — human-written rules always do — leave it long and say so; the budget lost that argument. Past double the budget, re-file rather than compress: package facts into nested `CLAUDE.md` files, long-form detail into `docs/` behind a plain pointer (a pointer, not an `@import` — an import would still load).
 
 ## 5. Hand off
 

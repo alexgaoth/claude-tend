@@ -38,13 +38,15 @@ Claude can also invoke it on its own after finishing significant work — the sk
 2. **Harvest** the session: what was discovered the hard way, what went wrong that one line would have prevented, rules the user stated, commands that actually work, invariants the code doesn't announce.
 3. **Gate** every candidate — it must be non-obvious, durable, behavior-changing, and project-scoped, or it's dropped. Zero survivors still runs the staleness pass below; "nothing to add and nothing stale" is the honest no-op — never padding.
 4. **Verify** existing claims in areas the session touched — stale commands and dead paths get fixed or deleted.
-5. **Edit** in place — merge rather than append, facts at the right scope, a ~60-line target per file with hard pressure past ~100. The diff is summarized and left uncommitted for review — unless the flow you're in already commits, in which case it rides along in that commit.
+5. **Edit** in place — merge rather than append, facts at the right scope, within a budget sized to the project (below). The diff is summarized and left uncommitted for review — unless the flow you're in already commits, in which case it rides along in that commit.
 
 ## The philosophy
 
 A `CLAUDE.md` is not documentation — it's **context every future session pays for**. Every line is loaded into every conversation in that repo, forever. So the skill is built around a budget, not a wiki:
 
 - A line earns its place only if it **changes what an agent would do**.
+- **The budget scales with the project, far slower than the project does** — 40 lines under 100 tracked files, 60 under 1,000, 80 under 10,000, 100 at 10,000 or more, and each nested per-package file is budgeted from its own subtree. A repo of a few hundred files still lands on the familiar ~60, while a toy repo tightens to 40 and a monorepo gets 100 — because one fixed number cannot be right for all three.
+- **It's spent by displacement, not truncation.** At budget, a new line has to beat a line already there and take its place — so the file converges on its best N lines rather than being cut off at N.
 - **Deleting a stale line is worth as much as adding a good one.** A wrong claim in CLAUDE.md is worse than no claim, because agents trust it over the code.
 - The highest-value source is **friction**: the places where this session's agent guessed wrong are exactly where the next one will.
 
