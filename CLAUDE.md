@@ -7,6 +7,7 @@
 - The skill name `tend` is kept in sync by hand across four places: the `skills/tend/` directory name, the SKILL.md frontmatter `name:`, `.claude-plugin/plugin.json`, and the `plugins` entry in `.claude-plugin/marketplace.json`. A rename or a new skill must touch all of them.
 - `skills/tend/SKILL.md` stays under ~120 lines and its frontmatter description under 1024 chars — the description is what drives model auto-invocation, and the skill must practice the budget it preaches.
 - Shell commands printed inside `skills/tend/SKILL.md` are contract, not illustration — run each one, from a subdirectory, before committing a change to it. `git ls-files <path>` returns 0 rather than an error from the wrong cwd, so a plausible-looking pathspec silently floors the computed budget to its smallest band.
+- The nudge `reason` must cap the model's reply length and forbid repeating the previous answer — wording that asks it to "restate the summary" makes it paste the entire answer twice.
 - README behavior claims are testable guarantees (fail-silent, once-per-session, git-repos-only), not prose: any change to hook or skill behavior must update the matching README sentence.
 - The budget bands (40/60/80/100 lines, by governed file count) are stated in full in both `skills/tend/SKILL.md` and README's philosophy section. Retune one and the other drifts silently — there is no test to catch it.
 
