@@ -72,9 +72,10 @@ def main() -> None:
                     "significant work in this repo — a nontrivial change, surprising "
                     "debugging, corrected assumptions — run the `tend` skill to fold "
                     "what was learned into CLAUDE.md before finishing. If the session "
-                    "was trivial, just finish. If you do run tend, keep its report to "
-                    "one or two lines, then restate your original final summary so it "
-                    "is the last thing the user reads."
+                    "was trivial, just finish. Either way reply with at most one or "
+                    "two lines — what tend changed, or that there was nothing to tend "
+                    "— and never repeat or restate any part of your previous answer; "
+                    "it is already on screen."
                 ),
             }
         )
